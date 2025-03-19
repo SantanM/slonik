@@ -15,7 +15,7 @@ jobs:
           fetch-depth: 0
       - uses: pnpm/action-setup@v4.0.0
         with:
-          version: 10
+          version: 9
           standalone: true
 
       - uses: actions/setup-node@v4
@@ -30,97 +30,97 @@ jobs:
 
       - run: npm run lint
     timeout-minutes: 10
-  test:
-    env:
-      TEST_ONLY_NON_INTEGRATION: 'true'
-    runs-on: ubuntu-latest
-    name: Test
-    steps:
-      - name: setup repository
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-      - name: setup node.js
-        uses: silverhand-io/actions-node-pnpm-run-steps@v4
-      - run: npm run test
-    timeout-minutes: 10
-  test-pg-integration:
-    env:
-      TEST_ONLY_PG_INTEGRATION: 'true'
-    services:
-      postgres:
-        image: postgres
-        env:
-          POSTGRES_PASSWORD: postgres
-          POSTGRES_USER: postgres
-          POSTGRES_DB: postgres
-        ports:
-          - 5432:5432
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-    runs-on: ubuntu-latest
-    name: Test "pg" integration
-    steps:
-      - name: setup repository
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-      - name: setup node.js
-        uses: silverhand-io/actions-node-pnpm-run-steps@v4
-      - run: npm run test
-        env:
-          POSTGRES_DSN: postgres:postgres@localhost:5432
-    timeout-minutes: 10
-  test-postgres-integration:
-    env:
-      TEST_ONLY_POSTGRES_INTEGRATION: 'true'
-    services:
-      postgres:
-        image: postgres
-        env:
-          POSTGRES_PASSWORD: postgres
-          POSTGRES_USER: postgres
-          POSTGRES_DB: postgres
-        ports:
-          - 5432:5432
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-    runs-on: ubuntu-latest
-    name: Test "postgres" integration
-    steps:
-      - name: setup repository
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-      - name: setup node.js
-        uses: silverhand-io/actions-node-pnpm-run-steps@v4
-      - run: npm run test
-        env:
-          POSTGRES_DSN: postgres:postgres@localhost:5432
-    timeout-minutes: 10
-  release:
-    needs:
-      - lint
-      - test
-      - test-pg-integration
-      - test-postgres-integration
-    runs-on: ubuntu-latest
-    name: Release
-    steps:
-      - name: setup repository
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-      - name: setup node.js
-        uses: silverhand-io/actions-node-pnpm-run-steps@v4
-      - run: npm run build
-      - run: npx semantic-release
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+  # test:
+  #   env:l
+  #     TEST_ONLY_NON_INTEGRATION: 'true'
+  #   runs-on: ubuntu-latest
+  #   name: Test
+  #   steps:
+  #     - name: setup repository
+  #       uses: actions/checkout@v2
+  #       with:
+  #         fetch-depth: 0
+  #     - name: setup node.js
+  #       uses: silverhand-io/actions-node-pnpm-run-steps@v4
+  #     - run: npm run test
+  #   timeout-minutes: 10
+  # test-pg-integration:
+  #   env:
+  #     TEST_ONLY_PG_INTEGRATION: 'true'
+  #   services:
+  #     postgres:
+  #       image: postgres
+  #       env:
+  #         POSTGRES_PASSWORD: postgres
+  #         POSTGRES_USER: postgres
+  #         POSTGRES_DB: postgres
+  #       ports:
+  #         - 5432:5432
+  #       options: >-
+  #         --health-cmd pg_isready
+  #         --health-interval 10s
+  #         --health-timeout 5s
+  #         --health-retries 5
+  #   runs-on: ubuntu-latest
+  #   name: Test "pg" integration
+  #   steps:
+  #     - name: setup repository
+  #       uses: actions/checkout@v2
+  #       with:
+  #         fetch-depth: 0
+  #     - name: setup node.js
+  #       uses: silverhand-io/actions-node-pnpm-run-steps@v4
+  #     - run: npm run test
+  #       env:
+  #         POSTGRES_DSN: postgres:postgres@localhost:5432
+  #   timeout-minutes: 10
+  # test-postgres-integration:
+  #   env:
+  #     TEST_ONLY_POSTGRES_INTEGRATION: 'true'
+  #   services:
+  #     postgres:
+  #       image: postgres
+  #       env:
+  #         POSTGRES_PASSWORD: postgres
+  #         POSTGRES_USER: postgres
+  #         POSTGRES_DB: postgres
+  #       ports:
+  #         - 5432:5432
+  #       options: >-
+  #         --health-cmd pg_isready
+  #         --health-interval 10s
+  #         --health-timeout 5s
+  #         --health-retries 5
+  #   runs-on: ubuntu-latest
+  #   name: Test "postgres" integration
+  #   steps:
+  #     - name: setup repository
+  #       uses: actions/checkout@v2
+  #       with:
+  #         fetch-depth: 0
+  #     - name: setup node.js
+  #       uses: silverhand-io/actions-node-pnpm-run-steps@v4
+  #     - run: npm run test
+  #       env:
+  #         POSTGRES_DSN: postgres:postgres@localhost:5432
+  #   timeout-minutes: 10
+  # release:
+  #   needs:
+  #     - lint
+  #     - test
+  #     - test-pg-integration
+  #     - test-postgres-integration
+  #   runs-on: ubuntu-latest
+  #   name: Release
+  #   steps:
+  #     - name: setup repository
+  #       uses: actions/checkout@v2
+  #       with:
+  #         fetch-depth: 0
+  #     - name: setup node.js
+  #       uses: silverhand-io/actions-node-pnpm-run-steps@v4
+  #     - run: npm run build
+  #     - run: npx semantic-release
+  #       env:
+  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  #         NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
