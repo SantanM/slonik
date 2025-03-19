@@ -16,7 +16,8 @@ jobs:
       - name: setup node.js
         uses: silverhand-io/actions-node-pnpm-run-steps@v4
         with: 
-          pnpm-version: 8
+          pnpm-version: 10
+          standalone: true
       - run: npm run lint
     timeout-minutes: 10
   test:
