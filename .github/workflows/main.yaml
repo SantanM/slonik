@@ -16,7 +16,7 @@ jobs:
       - uses: pnpm/action-setup@v4.0.0
         with:
           version: 9
-          standalone: true
+          # standalone: true
 
       - uses: actions/setup-node@v4
         with:
